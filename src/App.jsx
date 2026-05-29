@@ -196,6 +196,54 @@ function ProjectCard({ project, index }) {
   );
 }
 
+function WorkGallery({ project }) {
+  const [activeImage, setActiveImage] = useState(project.gallery[0]);
+
+  return (
+    <div className="featured-work-gallery" aria-label={`${project.title} image gallery`}>
+      <div className="gallery-main">
+        <img src={activeImage.src} alt={`${project.title} - ${activeImage.label}`} />
+      </div>
+      <div className="gallery-thumbnails" aria-label="URBN brand feed gallery">
+        {project.gallery.map((item) => (
+          <button
+            className={`gallery-thumb ${item.src === activeImage.src ? "is-active" : ""}`}
+            type="button"
+            aria-label={`Show ${item.label} feed image`}
+            aria-pressed={item.src === activeImage.src}
+            onClick={() => setActiveImage(item)}
+            key={item.src}
+          >
+            <img src={item.src} alt="" loading="lazy" />
+            <span className="t-sans-caps">{item.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FeaturedWorkSlide({ project }) {
+  const hasGallery = Array.isArray(project.gallery) && project.gallery.length > 0;
+
+  return (
+    <article className="featured-work-slide">
+      <div className={`featured-work-media ${hasGallery ? "has-gallery" : ""}`}>
+        {hasGallery ? <WorkGallery project={project} /> : <img src={project.image} alt="" />}
+      </div>
+      <div className="featured-work-copy">
+        <div className="pc-meta t-sans-caps">
+          <span>{project.category}</span>
+          <span>{project.year}</span>
+        </div>
+        <h3 className="t-h2">{project.title}</h3>
+        <p className="pc-type t-sans-caps">{project.type}</p>
+        <p className="t-body">{project.description}</p>
+      </div>
+    </article>
+  );
+}
+
 function Work() {
   return (
     <section className="work-section" id="work">
@@ -213,22 +261,7 @@ function Work() {
           slides={featuredWork}
           className="work-slideshow"
           label="Featured Taylor Jones work samples"
-          renderSlide={(project) => (
-            <article className="featured-work-slide">
-              <div className="featured-work-media">
-                <img src={project.image} alt="" />
-              </div>
-              <div className="featured-work-copy">
-                <div className="pc-meta t-sans-caps">
-                  <span>{project.category}</span>
-                  <span>{project.year}</span>
-                </div>
-                <h3 className="t-h2">{project.title}</h3>
-                <p className="pc-type t-sans-caps">{project.type}</p>
-                <p className="t-body">{project.description}</p>
-              </div>
-            </article>
-          )}
+          renderSlide={(project) => <FeaturedWorkSlide project={project} />}
         />
 
         <div className="project-index" aria-label="All work samples">

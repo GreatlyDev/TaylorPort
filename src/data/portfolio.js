@@ -70,6 +70,22 @@ export const featuredWork = [
       "Three-month marketing reports translating email, social, reach, engagement, and audience-growth metrics into recommendations for a children's art program.",
   },
   {
+    title: "Curated Feeds for URBN Brands",
+    category: "Professional / Real-World Work",
+    year: "2018-2020",
+    type: "Visual Content Curation",
+    image: "/assets/work/urbn-feed-1.png",
+    gallery: [
+      { src: "/assets/work/urbn-feed-1.png", label: "Urban Outfitters" },
+      { src: "/assets/work/urbn-feed-2.png", label: "URBN brand family" },
+      { src: "/assets/work/urbn-feed-3.png", label: "Free People" },
+      { src: "/assets/work/urbn-feed-4.png", label: "Nuuly" },
+      { src: "/assets/work/urbn-feed-5.png", label: "Anthropologie" },
+    ],
+    description:
+      "A visual content curation project exploring feed direction across Urban Outfitters, Nuuly, Anthropologie, and Free People. The work highlights brand-specific styling, color rhythm, lifestyle cues, and social-first merchandising across distinct URBN audiences.",
+  },
+  {
     title: "Eboni Envete Digital Magazine Concept",
     category: "Original Concepts",
     year: "2023",

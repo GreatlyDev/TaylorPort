@@ -29,6 +29,39 @@ function lineLabel(text, className = "") {
   return `<div class="line-label-wrapper ${className}"><span class="t-sans-caps">${escapeHtml(text)}</span></div>`;
 }
 
+function renderWorkMedia(project) {
+  if (!Array.isArray(project.gallery) || project.gallery.length === 0) {
+    return `
+      <div class="featured-work-media">
+        <img src="${escapeHtml(project.image)}" alt="">
+      </div>
+    `;
+  }
+
+  const [firstImage] = project.gallery;
+
+  return `
+    <div class="featured-work-media has-gallery">
+      <div class="featured-work-gallery" aria-label="${escapeHtml(project.title)} image gallery" data-gallery>
+        <div class="gallery-main">
+          <img src="${escapeHtml(firstImage.src)}" alt="${escapeHtml(`${project.title} - ${firstImage.label}`)}" data-gallery-main>
+        </div>
+        <div class="gallery-thumbnails" aria-label="URBN brand feed gallery">
+          ${project.gallery
+            .map(
+              (item, index) => `
+            <button class="gallery-thumb ${index === 0 ? "is-active" : ""}" type="button" aria-label="Show ${escapeHtml(item.label)} feed image" aria-pressed="${index === 0 ? "true" : "false"}" data-gallery-thumb="${escapeHtml(item.src)}" data-gallery-label="${escapeHtml(item.label)}">
+              <img src="${escapeHtml(item.src)}" alt="" loading="lazy">
+              <span class="t-sans-caps">${escapeHtml(item.label)}</span>
+            </button>`,
+            )
+            .join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function workSlideshow() {
   const slides = featuredWork;
   return `
@@ -39,9 +72,7 @@ function workSlideshow() {
             (project, index) => `
           <div class="slide ${index === 0 ? "is-active" : ""}" aria-hidden="${index === 0 ? "false" : "true"}">
             <article class="featured-work-slide">
-              <div class="featured-work-media">
-                <img src="${escapeHtml(project.image)}" alt="">
-              </div>
+              ${renderWorkMedia(project)}
               <div class="featured-work-copy">
                 <div class="pc-meta t-sans-caps">
                   <span>${escapeHtml(project.category)}</span>
@@ -310,6 +341,24 @@ function renderPage() {
             if (event.key === "ArrowRight") show(current + 1);
           });
         });
+
+        document.querySelectorAll("[data-gallery]").forEach((gallery) => {
+          const mainImage = gallery.querySelector("[data-gallery-main]");
+          const thumbs = Array.from(gallery.querySelectorAll("[data-gallery-thumb]"));
+
+          thumbs.forEach((thumb) => {
+            thumb.addEventListener("click", () => {
+              if (!mainImage) return;
+              mainImage.src = thumb.dataset.galleryThumb;
+              mainImage.alt = thumb.getAttribute("aria-label") || "";
+              thumbs.forEach((candidate) => {
+                const active = candidate === thumb;
+                candidate.classList.toggle("is-active", active);
+                candidate.setAttribute("aria-pressed", active ? "true" : "false");
+              });
+            });
+          });
+        });
       </script>
     </body>
   </html>`;
@@ -338,6 +387,8 @@ const server = http.createServer((request, response) => {
         ? "application/pdf"
         : extension === ".jpg" || extension === ".jpeg"
           ? "image/jpeg"
+          : extension === ".png"
+            ? "image/png"
           : "application/octet-stream";
     response.writeHead(200, { "Content-Type": contentType, "Cache-Control": "no-store" });
     fs.createReadStream(assetPath).pipe(response);

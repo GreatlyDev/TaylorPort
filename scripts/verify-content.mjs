@@ -31,6 +31,11 @@ const requiredFiles = [
   "public/assets/work/original-claires-adventure.png",
   "public/assets/work/original-eboni-envete.png",
   "public/assets/work/original-urban-cblue.png",
+  "public/assets/work/urbn-feed-1.png",
+  "public/assets/work/urbn-feed-2.png",
+  "public/assets/work/urbn-feed-3.png",
+  "public/assets/work/urbn-feed-4.png",
+  "public/assets/work/urbn-feed-5.png",
 ];
 
 const requiredText = [
@@ -46,6 +51,8 @@ const requiredText = [
   "Eboni Env",
   "The Cerulean Edit",
   "The Cerulean Edit That's All",
+  "Curated Feeds for URBN Brands",
+  "Urban Outfitters, Nuuly, Anthropologie, and Free People",
   "U.S. Customs and Border Protection",
   "U.S. Navy",
   "Fashion Institute of Technology",
@@ -101,6 +108,13 @@ for (const requiredSlideshowClass of ["static-hero-portrait", "work-slideshow", 
   }
 }
 
+for (const galleryMarker of ["WorkGallery", "featured-work-gallery", "gallery: ["]) {
+  if (!appText.includes(galleryMarker)) {
+    console.error(`Missing URBN gallery marker: ${galleryMarker}`);
+    process.exit(1);
+  }
+}
+
 const appSource = fs.readFileSync(path.join(root, "src/App.jsx"), "utf8");
 const previewSource = fs.readFileSync(path.join(root, "scripts/static-preview.mjs"), "utf8");
 
@@ -119,9 +133,14 @@ if (!previewSource.includes('href="${documentLinks.linkedIn}" target="_blank"'))
   process.exit(1);
 }
 
+if (!previewSource.includes("renderWorkMedia") || !previewSource.includes("data-gallery-thumb")) {
+  console.error("Static preview should render the URBN mini-gallery thumbnails.");
+  process.exit(1);
+}
+
 const workImageMatches = appText.match(/image:\s*"\/assets\/work\//g) ?? [];
-if (workImageMatches.length < 9) {
-  console.error(`Expected 9 local work-card images, found ${workImageMatches.length}.`);
+if (workImageMatches.length < 10) {
+  console.error(`Expected 10 local work-card images, found ${workImageMatches.length}.`);
   process.exit(1);
 }
 
@@ -134,6 +153,12 @@ if (finalWorkImageMatches.length > 0) {
 const originalWorkImageMatches = appText.match(/image:\s*"\/assets\/work\/original-/g) ?? [];
 if (originalWorkImageMatches.length < 9) {
   console.error(`Expected 9 original supplied slideshow images, found ${originalWorkImageMatches.length}.`);
+  process.exit(1);
+}
+
+const urbnGalleryMatches = appText.match(/src:\s*"\/assets\/work\/urbn-feed-/g) ?? [];
+if (urbnGalleryMatches.length < 5) {
+  console.error(`Expected 5 URBN gallery images, found ${urbnGalleryMatches.length}.`);
   process.exit(1);
 }
 
