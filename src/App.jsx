@@ -215,7 +215,7 @@ function WorkGallery({ project }) {
             key={item.src}
           >
             <img src={item.src} alt="" loading="lazy" />
-            <span className="t-sans-caps">{item.label}</span>
+            <span className="gallery-label-text">{item.shortLabel ?? item.label}</span>
           </button>
         ))}
       </div>

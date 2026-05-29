@@ -502,14 +502,14 @@ a {
 }
 
 .gallery-main {
-  aspect-ratio: 4 / 3;
-  background-color: var(--bg-canvas);
+  aspect-ratio: 1 / 1;
+  background-color: #ffffff;
   overflow: hidden;
 }
 
 .gallery-main img {
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   width: 100%;
 }
@@ -546,8 +546,18 @@ a {
   width: 100%;
 }
 
-.gallery-thumb span {
-  overflow-wrap: anywhere;
+.gallery-label-text {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .featured-work-copy {

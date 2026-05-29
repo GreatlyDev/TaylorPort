@@ -52,7 +52,7 @@ function renderWorkMedia(project) {
               (item, index) => `
             <button class="gallery-thumb ${index === 0 ? "is-active" : ""}" type="button" aria-label="Show ${escapeHtml(item.label)} feed image" aria-pressed="${index === 0 ? "true" : "false"}" data-gallery-thumb="${escapeHtml(item.src)}" data-gallery-label="${escapeHtml(item.label)}">
               <img src="${escapeHtml(item.src)}" alt="" loading="lazy">
-              <span class="t-sans-caps">${escapeHtml(item.label)}</span>
+              <span class="gallery-label-text">${escapeHtml(item.shortLabel ?? item.label)}</span>
             </button>`,
             )
             .join("")}

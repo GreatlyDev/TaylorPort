@@ -115,6 +115,13 @@ for (const galleryMarker of ["WorkGallery", "featured-work-gallery", "gallery: [
   }
 }
 
+for (const galleryQualityMarker of ['shortLabel: "Anthro"', "object-fit: contain;", "white-space: nowrap;"]) {
+  if (!appText.includes(galleryQualityMarker)) {
+    console.error(`URBN gallery needs cleaner full-image display/labels: ${galleryQualityMarker}`);
+    process.exit(1);
+  }
+}
+
 const appSource = fs.readFileSync(path.join(root, "src/App.jsx"), "utf8");
 const previewSource = fs.readFileSync(path.join(root, "scripts/static-preview.mjs"), "utf8");
 
