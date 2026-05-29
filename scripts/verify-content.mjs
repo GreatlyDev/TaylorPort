@@ -122,6 +122,11 @@ for (const galleryQualityMarker of ['shortLabel: "Anthro"', "object-fit: contain
   }
 }
 
+if (appText.indexOf('shortLabel: "Anthro"') > appText.indexOf('shortLabel: "Nuuly"')) {
+  console.error("URBN gallery should end with the Nuuly all-brand feed image.");
+  process.exit(1);
+}
+
 const appSource = fs.readFileSync(path.join(root, "src/App.jsx"), "utf8");
 const previewSource = fs.readFileSync(path.join(root, "scripts/static-preview.mjs"), "utf8");
 
