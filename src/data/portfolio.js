@@ -217,7 +217,7 @@ export const tools = [
 ];
 
 export const education = [
-  "Fashion Institute of Technology - B.S. Advertising & Marketing Communications, Dean's List",
+  "Fashion Institute of Technology - B.S. Advertising & Marketing Communications, Dean's List; Minors in English, Economics, and Fashion History Theory & Culture",
   "Nassau County Community College - A.S. Paralegal",
 ];
 
