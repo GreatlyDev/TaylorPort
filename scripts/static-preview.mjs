@@ -121,11 +121,11 @@ function projectIndex() {
       ${featuredWork
         .map(
           (project, index) => `
-        <a href="${documentLinks.writingPortfolio}" class="project-index-item" target="_blank" rel="noreferrer">
+        <button class="project-index-item ${index === 0 ? "is-active" : ""}" type="button" aria-current="${index === 0 ? "true" : "false"}" data-project-jump="${index}">
           <span class="cap-num t-sans-caps">${String(index + 1).padStart(2, "0")}</span>
           <span class="project-index-title">${escapeHtml(project.title)}</span>
           <span class="project-index-meta t-sans-caps">${escapeHtml(project.category)} / ${escapeHtml(project.year)}</span>
-        </a>`,
+        </button>`,
         )
         .join("")}
     </div>
@@ -317,6 +317,7 @@ function renderPage() {
         document.querySelectorAll("[data-slideshow]").forEach((slideshow) => {
           const slides = Array.from(slideshow.querySelectorAll(".slide"));
           const dots = Array.from(slideshow.querySelectorAll("[data-slide-dot]"));
+          const projectButtons = Array.from(document.querySelectorAll("[data-project-jump]"));
           let current = 0;
 
           function show(index) {
@@ -331,11 +332,22 @@ function renderPage() {
               dot.classList.toggle("is-active", active);
               dot.setAttribute("aria-current", active ? "true" : "false");
             });
+            projectButtons.forEach((button, buttonIndex) => {
+              const active = buttonIndex === current;
+              button.classList.toggle("is-active", active);
+              button.setAttribute("aria-current", active ? "true" : "false");
+            });
           }
 
           slideshow.querySelector("[data-slide-prev]")?.addEventListener("click", () => show(current - 1));
           slideshow.querySelector("[data-slide-next]")?.addEventListener("click", () => show(current + 1));
           dots.forEach((dot) => dot.addEventListener("click", () => show(Number(dot.dataset.slideDot))));
+          projectButtons.forEach((button) =>
+            button.addEventListener("click", () => {
+              show(Number(button.dataset.projectJump));
+              slideshow.scrollIntoView({ behavior: "smooth", block: "start" });
+            }),
+          );
           slideshow.addEventListener("keydown", (event) => {
             if (event.key === "ArrowLeft") show(current - 1);
             if (event.key === "ArrowRight") show(current + 1);

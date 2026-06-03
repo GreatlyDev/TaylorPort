@@ -115,15 +115,22 @@ for (const galleryMarker of ["WorkGallery", "featured-work-gallery", "gallery: [
   }
 }
 
-for (const galleryQualityMarker of ['shortLabel: "Anthro"', "object-fit: contain;", "white-space: nowrap;"]) {
+for (const galleryQualityMarker of [
+  '{ src: "/assets/work/urbn-feed-1.png", label: "Anthropologie", shortLabel: "Anthro" }',
+  '{ src: "/assets/work/urbn-feed-2.png", label: "Nuuly", shortLabel: "Nuuly" }',
+  '{ src: "/assets/work/urbn-feed-4.png", label: "URBN brand overview", shortLabel: "URBN" }',
+  '{ src: "/assets/work/urbn-feed-5.png", label: "Urban Outfitters", shortLabel: "UO" }',
+  "object-fit: contain;",
+  "white-space: nowrap;",
+]) {
   if (!appText.includes(galleryQualityMarker)) {
     console.error(`URBN gallery needs cleaner full-image display/labels: ${galleryQualityMarker}`);
     process.exit(1);
   }
 }
 
-if (appText.indexOf('shortLabel: "Anthro"') > appText.indexOf('shortLabel: "Nuuly"')) {
-  console.error("URBN gallery should end with the Nuuly all-brand feed image.");
+if (appText.indexOf('shortLabel: "UO"') > appText.indexOf('shortLabel: "URBN"')) {
+  console.error("URBN gallery should end with the all-brand URBN overview image.");
   process.exit(1);
 }
 
@@ -148,6 +155,13 @@ if (!previewSource.includes('href="${documentLinks.linkedIn}" target="_blank"'))
 if (!previewSource.includes("renderWorkMedia") || !previewSource.includes("data-gallery-thumb")) {
   console.error("Static preview should render the URBN mini-gallery thumbnails.");
   process.exit(1);
+}
+
+for (const projectJumpMarker of ["currentProject", "data-project-jump", ".project-index-item.is-active"]) {
+  if (!appText.includes(projectJumpMarker) && !previewSource.includes(projectJumpMarker)) {
+    console.error(`Project index should control the slideshow instead of opening the PDF: ${projectJumpMarker}`);
+    process.exit(1);
+  }
 }
 
 const workImageMatches = appText.match(/image:\s*"\/assets\/work\//g) ?? [];
@@ -194,7 +208,7 @@ if (!appText.includes("aspect-ratio: 4 / 3;") || !appText.includes("height: 100%
   process.exit(1);
 }
 
-if (!appText.includes(".work-slideshow .slide-viewport") || !appText.includes("min-height: clamp(520px, 44vw, 620px);")) {
+if (!appText.includes(".work-slideshow .slide-viewport") || !appText.includes("height: clamp(620px, 58vw, 760px);")) {
   console.error("Work slideshow viewport should reserve a stable height so controls do not jump between slides.");
   process.exit(1);
 }

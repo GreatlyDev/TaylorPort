@@ -76,11 +76,11 @@ export const featuredWork = [
     type: "Visual Content Curation",
     image: "/assets/work/urbn-feed-1.png",
     gallery: [
-      { src: "/assets/work/urbn-feed-1.png", label: "Urban Outfitters", shortLabel: "UO" },
-      { src: "/assets/work/urbn-feed-2.png", label: "URBN brand family", shortLabel: "URBN" },
+      { src: "/assets/work/urbn-feed-1.png", label: "Anthropologie", shortLabel: "Anthro" },
+      { src: "/assets/work/urbn-feed-2.png", label: "Nuuly", shortLabel: "Nuuly" },
       { src: "/assets/work/urbn-feed-3.png", label: "Free People", shortLabel: "FP" },
-      { src: "/assets/work/urbn-feed-5.png", label: "Anthropologie", shortLabel: "Anthro" },
-      { src: "/assets/work/urbn-feed-4.png", label: "Nuuly", shortLabel: "Nuuly" },
+      { src: "/assets/work/urbn-feed-5.png", label: "Urban Outfitters", shortLabel: "UO" },
+      { src: "/assets/work/urbn-feed-4.png", label: "URBN brand overview", shortLabel: "URBN" },
     ],
     description:
       "A visual content curation project exploring feed direction across Urban Outfitters, Nuuly, Anthropologie, and Free People. The work highlights brand-specific styling, color rhythm, lifestyle cues, and social-first merchandising across distinct URBN audiences.",

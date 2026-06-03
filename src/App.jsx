@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   capabilities,
   documentLinks,
@@ -18,10 +18,18 @@ function LineLabel({ children, className = "" }) {
   );
 }
 
-function Slideshow({ slides, className = "", label, renderSlide }) {
-  const [current, setCurrent] = useState(0);
+function Slideshow({ slides, className = "", current, label, onChange, renderSlide }) {
+  const [internalCurrent, setInternalCurrent] = useState(0);
+  const currentIndex = typeof current === "number" ? current : internalCurrent;
   const lastIndex = slides.length - 1;
-  const goTo = (index) => setCurrent((index + slides.length) % slides.length);
+  const goTo = (index) => {
+    const nextIndex = (index + slides.length) % slides.length;
+    if (onChange) {
+      onChange(nextIndex);
+      return;
+    }
+    setInternalCurrent(nextIndex);
+  };
 
   return (
     <div
@@ -30,15 +38,15 @@ function Slideshow({ slides, className = "", label, renderSlide }) {
       aria-roledescription="carousel"
       tabIndex={0}
       onKeyDown={(event) => {
-        if (event.key === "ArrowLeft") goTo(current - 1);
-        if (event.key === "ArrowRight") goTo(current + 1);
+        if (event.key === "ArrowLeft") goTo(currentIndex - 1);
+        if (event.key === "ArrowRight") goTo(currentIndex + 1);
       }}
     >
       <div className="slide-viewport">
         {slides.map((slide, index) => (
           <div
-            className={`slide ${index === current ? "is-active" : ""}`}
-            aria-hidden={index !== current}
+            className={`slide ${index === currentIndex ? "is-active" : ""}`}
+            aria-hidden={index !== currentIndex}
             key={`${slide.title}-${slide.year ?? index}`}
           >
             {renderSlide(slide, index)}
@@ -54,16 +62,16 @@ function Slideshow({ slides, className = "", label, renderSlide }) {
         <div className="slide-dots" aria-label="Slide navigation">
           {slides.map((slide, index) => (
             <button
-              className={`slide-dot ${index === current ? "is-active" : ""}`}
+              className={`slide-dot ${index === currentIndex ? "is-active" : ""}`}
               type="button"
               aria-label={`Show slide ${index + 1}: ${slide.title}`}
-              aria-current={index === current}
+              aria-current={index === currentIndex}
               onClick={() => goTo(index)}
               key={`dot-${slide.title}-${index}`}
             />
           ))}
         </div>
-        <button className="slide-control" type="button" onClick={() => goTo(current === lastIndex ? 0 : current + 1)}>
+        <button className="slide-control" type="button" onClick={() => goTo(currentIndex === lastIndex ? 0 : currentIndex + 1)}>
           <span className="sr-only">Next slide</span>
           <span aria-hidden="true">Next</span>
         </button>
@@ -245,6 +253,13 @@ function FeaturedWorkSlide({ project }) {
 }
 
 function Work() {
+  const [currentProject, setCurrentProject] = useState(0);
+  const slideshowRef = useRef(null);
+  const jumpToProject = (index) => {
+    setCurrentProject(index);
+    slideshowRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section className="work-section" id="work">
       <div className="container">
@@ -257,20 +272,24 @@ function Work() {
           </p>
         </div>
 
-        <Slideshow
-          slides={featuredWork}
-          className="work-slideshow"
-          label="Featured Taylor Jones work samples"
-          renderSlide={(project) => <FeaturedWorkSlide project={project} />}
-        />
+        <div className="work-carousel-anchor" ref={slideshowRef}>
+          <Slideshow
+            slides={featuredWork}
+            className="work-slideshow"
+            current={currentProject}
+            label="Featured Taylor Jones work samples"
+            onChange={setCurrentProject}
+            renderSlide={(project) => <FeaturedWorkSlide project={project} />}
+          />
+        </div>
 
         <div className="project-index" aria-label="All work samples">
           {featuredWork.map((project, index) => (
-            <a
-              href={documentLinks.writingPortfolio}
-              className="project-index-item"
-              target="_blank"
-              rel="noreferrer"
+            <button
+              className={`project-index-item ${index === currentProject ? "is-active" : ""}`}
+              type="button"
+              aria-current={index === currentProject ? "true" : undefined}
+              onClick={() => jumpToProject(index)}
               key={project.title}
             >
               <span className="cap-num t-sans-caps">{String(index + 1).padStart(2, "0")}</span>
@@ -278,7 +297,7 @@ function Work() {
               <span className="project-index-meta t-sans-caps">
                 {project.category} / {project.year}
               </span>
-            </a>
+            </button>
           ))}
         </div>
       </div>

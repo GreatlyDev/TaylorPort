@@ -460,7 +460,7 @@ a {
 .work-slideshow .slide-viewport {
   align-items: center;
   display: flex;
-  min-height: clamp(520px, 44vw, 620px);
+  height: clamp(620px, 58vw, 760px);
   overflow: visible;
 }
 
@@ -473,6 +473,7 @@ a {
   display: grid;
   gap: 4rem;
   grid-template-columns: minmax(340px, 1.15fr) minmax(0, 0.85fr);
+  height: 100%;
 }
 
 .featured-work-media {
@@ -493,17 +494,25 @@ a {
 .featured-work-media.has-gallery {
   aspect-ratio: auto;
   background-color: #ffffff;
+  display: flex;
+  height: 100%;
+  min-height: 0;
   padding: 0.75rem;
 }
 
 .featured-work-gallery {
   display: grid;
   gap: 0.9rem;
+  grid-template-rows: minmax(0, 1fr) auto;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
 }
 
 .gallery-main {
   aspect-ratio: 1 / 1;
   background-color: #ffffff;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -578,15 +587,23 @@ a {
 
 .project-index-item {
   align-items: center;
+  background: transparent;
+  border: 0;
   border-bottom: 1px solid var(--border-subtle);
+  color: inherit;
+  cursor: pointer;
   display: grid;
+  font: inherit;
   gap: 1.5rem;
   grid-template-columns: auto 1fr auto;
   padding: 1.35rem 0;
+  text-align: left;
   transition: color 0.3s ease, padding-left 0.3s ease;
+  width: 100%;
 }
 
-.project-index-item:hover {
+.project-index-item:hover,
+.project-index-item.is-active {
   color: var(--accent-biscuit);
   padding-left: 0.75rem;
 }
@@ -844,7 +861,7 @@ a {
   }
 
   .work-slideshow .slide-viewport {
-    min-height: clamp(900px, 160vw, 1100px);
+    height: clamp(900px, 160vw, 1120px);
   }
 
   .about-text-columns {
