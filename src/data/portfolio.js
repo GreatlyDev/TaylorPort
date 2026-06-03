@@ -72,7 +72,7 @@ export const featuredWork = [
   {
     title: "Curated Feeds for URBN Brands",
     category: "Professional / Real-World Work",
-    year: "2018-2020",
+    year: "2024",
     type: "Visual Content Curation",
     image: "/assets/work/urbn-feed-1.png",
     gallery: [

@@ -134,6 +134,12 @@ if (appText.indexOf('shortLabel: "UO"') > appText.indexOf('shortLabel: "URBN"'))
   process.exit(1);
 }
 
+const curatedFeedsBlock = appText.match(/title: "Curated Feeds for URBN Brands"[\s\S]*?description:/)?.[0] ?? "";
+if (!curatedFeedsBlock.includes('year: "2024"')) {
+  console.error("Curated Feeds for URBN Brands should use 2024 as its year.");
+  process.exit(1);
+}
+
 const appSource = fs.readFileSync(path.join(root, "src/App.jsx"), "utf8");
 const previewSource = fs.readFileSync(path.join(root, "scripts/static-preview.mjs"), "utf8");
 
